@@ -22,18 +22,25 @@ class App extends Component {
     let roll = 0;
 
     for(let frame = 0; frame < 10; frame++){
-      score += this.state.rolls[roll] + this.state.rolls[roll+1];
+      if((this.state.rolls[roll] + this.state.rolls[roll+1]) == 10){
+        score = 10 + this.state.rolls[roll+2];
+      } else {
+        score += this.state.rolls[roll] + this.state.rolls[roll+1];
+      }
       roll += 2;
     }
-    
+
     this.setState({score: score});
     return this.state.score;
   }
 
   startGame = () => {
-    this.resetGame();    
-    for(let i = 0; i < 20; i++){
-      this.roll(1);
+    this.resetGame();  
+    this.roll(1);
+    this.roll(9); 
+    this.roll(1);  
+    for(let i = 0; i < 17; i++){
+      this.roll(0);
     }
     setTimeout(() => {
       this.score();

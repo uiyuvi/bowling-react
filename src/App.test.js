@@ -38,4 +38,11 @@ it('should return 20 for all 1', () => {
   expect(getScore()).toBe(20);
 });
 
+it('should handle `Spare` game', () => {
+  game.instance().roll(5);
+  game.instance().roll(5);
+  game.instance().roll(1);
+  multipleRollWithPin(17,0);
 
+  expect(getScore()).toBe(12);
+});
