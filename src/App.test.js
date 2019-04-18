@@ -22,4 +22,14 @@ it('should handle `Gutter` game', () => {
   expect(game.instance().score()).toBe(0);
 });
 
+it('should return 20 for all 1', () => {  
+  var game = shallow(<App />);
+
+  for(let i = 0; i < 20; i++){
+    game.instance().roll(1);
+  }
+  
+  expect(game.instance().score()).toBe(20);
+});
+
 

@@ -11,8 +11,10 @@ class App extends Component {
   };
 
   roll = (pin) => {
-    let updatedRolls = this.state.rolls.concat(pin);
-    this.setState({rolls: updatedRolls});
+    //let updatedRolls = this.state.rolls.concat(pin);
+    this.setState((prevState) => ({
+      rolls: prevState.rolls.concat(pin)
+    }));
   }  
 
   score = () => {
@@ -24,17 +26,24 @@ class App extends Component {
     return this.state.score;
   }
 
-  rollPins = () => {
+  startGame = () => {
+    this.resetGame();    
     for(let i = 0; i < 20; i++){
-      this.roll(0);
+      this.roll(1);
     }
-    this.score();
+    setTimeout(() => {
+      this.score();
+    },20);
+  }
+
+  resetGame() {
+    this.setState({ rolls: [] });
   }
 
   render() {
     return (
       <div className="App">
-        <input type ="button" onClick={this.rollPins} value = "Start game"/>
+        <input type ="button" onClick={this.startGame} value = "Start game"/>
         <p> Your score is : {this.state.score} </p>
       </div>
     );
