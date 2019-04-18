@@ -10,7 +10,7 @@ function getScore() {
   return game.instance().score();
 }
 
-function rollMany(rollCount,pin) {
+function multipleRollWithPin(rollCount,pin) {
   for(let i = 0; i < rollCount; i++){
     game.instance().roll(pin);
   }
@@ -27,15 +27,16 @@ it('renders without crashing', () => {
 });
 
 it('should handle `Gutter` game', () => {
-  rollMany(20,0);
+  multipleRollWithPin(20,0);
   
   expect(getScore()).toBe(0);
 });
 
 it('should return 20 for all 1', () => {  
-  rollMany(20,1);
+  multipleRollWithPin(20,1);
   
   expect(getScore()).toBe(20);
 });
+
 
 
