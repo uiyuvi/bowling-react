@@ -11,7 +11,6 @@ class App extends Component {
   };
 
   roll = (pin) => {
-    //let updatedRolls = this.state.rolls.concat(pin);
     this.setState((prevState) => ({
       rolls: prevState.rolls.concat(pin)
     }));
@@ -60,11 +59,11 @@ class App extends Component {
   }
 
   isStrike(roll) {
-    return this.state.rolls[roll] == 10;
+    return this.state.rolls[roll] === 10;
   }
 
   isSpare(roll) {
-    return this.frameScore(roll) == 10;
+    return this.frameScore(roll) === 10;
   }
 
   frameScore(roll) {
@@ -76,9 +75,32 @@ class App extends Component {
   }
 
   render() {
+    let scoreBoard = document.querySelector('.scoreBoard');
+    let roll = 0;
+    let scoreBoardInnerHTML;
+    if(scoreBoard !== null){
+      for(let frame = 0; frame < 10; frame++){
+        scoreBoardInnerHTML = "";
+        scoreBoardInnerHTML += "<div class='frame'>";
+        if(this.isStrike(roll)){
+          scoreBoardInnerHTML += "<p class='pins'><span class='strike'>X</span><span class='strike'>-</span></p>";
+          roll +=1;
+        } else if(this.isSpare(roll)){
+          scoreBoardInnerHTML += "<p class='pins'><span class='strike'>"+this.state.rolls[roll]+"</span><span class='strike'>/</span></p>";
+          roll += 2;
+        } else {
+          scoreBoardInnerHTML += "<p class='pins'><span class='strike'>"+this.state.rolls[roll]+"</span><span class='strike'>"+this.state.rolls[roll+1]+"</span></p>";
+          roll += 2;
+        } 
+        scoreBoardInnerHTML += "</div>";
+        scoreBoard.innerHTML += scoreBoardInnerHTML;
+      }
+    }
     return (
       <div className="App">
         <input type ="button" onClick={this.startGame} value = "Start game"/>
+        <p>Score board:</p>
+        <div className="scoreBoard"></div>
         <p> Your score is : {this.state.score} </p>
       </div>
     );
