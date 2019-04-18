@@ -46,3 +46,12 @@ it('should handle `Spare` game', () => {
 
   expect(getScore()).toBe(12);
 });
+
+it('should handle `Strike` game', () => {
+  game.instance().roll(10);
+  game.instance().roll(5);
+  game.instance().roll(1);
+  multipleRollWithPin(16,0);
+
+  expect(getScore()).toBe(22);
+});
