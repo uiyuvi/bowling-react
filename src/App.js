@@ -19,9 +19,13 @@ class App extends Component {
 
   score = () => {
     let score = 0;
-    for(let roll = 0; roll < this.state.rolls.length; roll++){
-      score += this.state.rolls[roll];
+    let roll = 0;
+
+    for(let frame = 0; frame < 10; frame++){
+      score += this.state.rolls[roll] + this.state.rolls[roll+1];
+      roll += 2;
     }
+    
     this.setState({score: score});
     return this.state.score;
   }

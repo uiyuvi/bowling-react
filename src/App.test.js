@@ -39,4 +39,3 @@ it('should return 20 for all 1', () => {
 });
 
 
-
