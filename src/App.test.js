@@ -61,3 +61,27 @@ it('should handle perfect game', () => {
   
   expect(getScore()).toBe(300);
 });
+
+it('should handle both spare and strike in a game', () => {
+  game.instance().roll(1);
+  game.instance().roll(4);
+  game.instance().roll(4);
+  game.instance().roll(5);
+  game.instance().roll(6);
+  game.instance().roll(4);
+  game.instance().roll(5);
+  game.instance().roll(5);
+  game.instance().roll(10);
+  game.instance().roll(0);
+  game.instance().roll(1);
+  game.instance().roll(7);
+  game.instance().roll(3);
+  game.instance().roll(6);
+  game.instance().roll(4);
+  game.instance().roll(10);
+  game.instance().roll(2);
+  game.instance().roll(8);
+  game.instance().roll(6);
+  
+  expect(getScore()).toBe(133);
+});
