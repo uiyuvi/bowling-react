@@ -22,10 +22,10 @@ class App extends Component {
     let roll = 0;
 
     for(let frame = 0; frame < 10; frame++){
-      if((this.state.rolls[roll] + this.state.rolls[roll+1]) == 10){
+      if(this.isSpare(roll)){
         score = 10 + this.state.rolls[roll+2];
       } else {
-        score += this.state.rolls[roll] + this.state.rolls[roll+1];
+        score += this.frameScore(roll);
       }
       roll += 2;
     }
@@ -45,6 +45,14 @@ class App extends Component {
     setTimeout(() => {
       this.score();
     },20);
+  }
+
+  isSpare(roll) {
+    return this.frameScore(roll) == 10;
+  }
+
+  frameScore(roll) {
+    return this.state.rolls[roll] + this.state.rolls[roll + 1];
   }
 
   resetGame() {
