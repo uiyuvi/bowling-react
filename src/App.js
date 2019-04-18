@@ -22,11 +22,11 @@ class App extends Component {
     let roll = 0;
 
     for(let frame = 0; frame < 10; frame++){
-      if(this.state.rolls[roll] == 10){
-        score += 10 + this.state.rolls[roll+1] + this.state.rolls[roll+2];
+      if(this.isStrike(roll)){
+        score += 10 + this.strikeBonus(roll);
         roll += 1;
       } else if(this.isSpare(roll)){
-        score += 10 + this.state.rolls[roll+2];
+        score += 10 + this.spareBonus(roll);
         roll += 2;
       } else {
         score += this.frameScore(roll);
@@ -49,6 +49,18 @@ class App extends Component {
     setTimeout(() => {
       this.score();
     },20);
+  }
+
+  strikeBonus(roll) {
+    return this.state.rolls[roll+1] + this.state.rolls[roll+2];
+  }
+
+  spareBonus(roll) {
+    return this.state.rolls[roll+2];
+  }
+
+  isStrike(roll) {
+    return this.state.rolls[roll] == 10;
   }
 
   isSpare(roll) {
