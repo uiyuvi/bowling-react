@@ -55,3 +55,9 @@ it('should handle `Strike` game', () => {
 
   expect(getScore()).toBe(22);
 });
+
+it('should handle perfect game', () => {  
+  multipleRollWithPin(12,10);
+  
+  expect(getScore()).toBe(300);
+});
