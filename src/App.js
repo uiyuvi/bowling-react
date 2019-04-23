@@ -45,28 +45,48 @@ class App extends Component {
 
   startGame = () => {
     this.resetGame();  
-    this.roll(1);
-    this.roll(4);
-    this.roll(4);
-    this.roll(5);
-    this.roll(6);
-    this.roll(4);
-    this.roll(5);
-    this.roll(5);
-    this.roll(10);
-    this.roll(0);
-    this.roll(1);
-    this.roll(7);
-    this.roll(3);
-    this.roll(6);
-    this.roll(4);
-    this.roll(10);
-    this.roll(2);
-    this.roll(8);
-    this.roll(6);
-    setTimeout(() => {
+    let rolls=[];
+    let firstRoll, secondRoll, thirdRoll;
+    for(let frame = 0; frame < 10; frame++){
+      firstRoll = this.generateRandomRoll(10);
+      rolls.push(firstRoll);
+      if(firstRoll !== 10 && frame !== 9){
+        secondRoll = this.generateRandomRoll(9);
+        if((firstRoll + secondRoll) > 10){
+          secondRoll = 10-firstRoll;
+        }
+        rolls.push(secondRoll);
+      }
+      if(frame === 9){
+        secondRoll = this.generateRandomRoll(10);
+        thirdRoll =  this.generateRandomRoll(10);
+        if(firstRoll !== 10){
+          if((firstRoll + secondRoll) >= 10){
+            secondRoll = 10-firstRoll;
+            rolls.push(secondRoll); 
+            rolls.push(thirdRoll);
+          } else {            
+            rolls.push(secondRoll); 
+          }   
+        } else {
+          if((firstRoll + secondRoll) >= 10){
+            rolls.push(secondRoll);
+            rolls.push(thirdRoll);
+          } else {
+            rolls.push(secondRoll);
+          }
+        }
+      }
+    }
+    this.setState({
+      rolls:rolls
+    },() => {      
       this.score();
-    },20);
+    });
+  }
+
+  generateRandomRoll(max){
+    return Math.floor(Math.random()*(max)+1);
   }
 
   strikeBonus(roll) {
@@ -103,16 +123,25 @@ class App extends Component {
         scoreBoardInnerHTML = "";
         scoreBoardInnerHTML += "<div class='frame'> Frame - ";
         scoreBoardInnerHTML += (frame + 1);
-        if(this.isStrike(roll)){
-          scoreBoardInnerHTML += "<p class='pins'><span class='strike'>X</span><span class='strike'>-</span></p>";
-          roll +=1;
-        } else if(this.isSpare(roll)){
-          scoreBoardInnerHTML += "<p class='pins'><span class='strike'>"+this.state.rolls[roll]+"</span><span class='strike'>/</span></p>";
-          roll += 2;
+        if(frame !== 9){
+          if(this.isStrike(roll)){
+            scoreBoardInnerHTML += "<p class='pins'><span class='strike'>X</span><span class='strike'>-</span></p>";
+            roll +=1;
+          } else if(this.isSpare(roll)){
+            scoreBoardInnerHTML += "<p class='pins'><span class='spare'>"+this.state.rolls[roll]+"</span><span class='spare'>/</span></p>";
+            roll += 2;
+          } else {
+            scoreBoardInnerHTML += "<p class='pins'><span>"+this.state.rolls[roll]+"</span><span>"+this.state.rolls[roll+1]+"</span></p>";
+            roll += 2;
+          }
         } else {
-          scoreBoardInnerHTML += "<p class='pins'><span class='strike'>"+this.state.rolls[roll]+"</span><span class='strike'>"+this.state.rolls[roll+1]+"</span></p>";
-          roll += 2;
-        } 
+          scoreBoardInnerHTML += "<p class='pins'><span>"+(this.state.rolls[roll] === 10 ? 'X' : this.state.rolls[roll])+"</span><span>"+((this.state.rolls[roll] + this.state.rolls[roll+1]) === 10 ? '/' : this.state.rolls[roll+1])+"</span>";
+          if(this.state.rolls[roll+2]){
+            scoreBoardInnerHTML += "<span>"+this.state.rolls[roll+2]+"</span>"
+          }
+          scoreBoardInnerHTML +=  "</p>"
+          roll+=2;
+        }
         scoreBoardInnerHTML += this.state.frameScore[frame];
         scoreBoardInnerHTML += "</div>";
         scoreBoard.innerHTML += scoreBoardInnerHTML;
