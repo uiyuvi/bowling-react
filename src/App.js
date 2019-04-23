@@ -97,7 +97,7 @@ class App extends Component {
     let scoreBoard = document.querySelector('.scoreBoard');
     let roll = 0;
     let scoreBoardInnerHTML;
-    if(this.state.score){
+    if(this.state.score && scoreBoard != null){
       scoreBoard.innerHTML = "";
       for(let frame = 0; frame < 10; frame++){
         scoreBoardInnerHTML = "";
