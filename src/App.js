@@ -6,6 +6,7 @@ class App extends Component {
     super(props);
     this.state = {
       rolls: [],
+      frameScore:[],
       score: null
     }
   };
@@ -19,10 +20,11 @@ class App extends Component {
   score = () => {
     let score = 0;
     let roll = 0;
+    let framescore = [];
 
     for(let frame = 0; frame < 10; frame++){
       if(this.isStrike(roll)){
-        score += 10 + this.strikeBonus(roll);
+        score += 10 + this.strikeBonus(roll);        
         roll += 1;
       } else if(this.isSpare(roll)){
         score += 10 + this.spareBonus(roll);
@@ -31,20 +33,37 @@ class App extends Component {
         score += this.frameScore(roll);
         roll += 2;
       }
+      framescore[frame] = score;
     }
-
-    this.setState({score: score});
+    
+    this.setState({
+      score: score,
+      frameScore : framescore
+    });
     return this.state.score;
   }
 
   startGame = () => {
     this.resetGame();  
+    this.roll(1);
+    this.roll(4);
+    this.roll(4);
+    this.roll(5);
+    this.roll(6);
+    this.roll(4);
+    this.roll(5);
+    this.roll(5);
     this.roll(10);
-    this.roll(9); 
-    this.roll(1);  
-    for(let i = 0; i < 17; i++){
-      this.roll(0);
-    }
+    this.roll(0);
+    this.roll(1);
+    this.roll(7);
+    this.roll(3);
+    this.roll(6);
+    this.roll(4);
+    this.roll(10);
+    this.roll(2);
+    this.roll(8);
+    this.roll(6);
     setTimeout(() => {
       this.score();
     },20);
@@ -78,10 +97,12 @@ class App extends Component {
     let scoreBoard = document.querySelector('.scoreBoard');
     let roll = 0;
     let scoreBoardInnerHTML;
-    if(scoreBoard !== null){
+    if(this.state.score){
+      scoreBoard.innerHTML = "";
       for(let frame = 0; frame < 10; frame++){
         scoreBoardInnerHTML = "";
-        scoreBoardInnerHTML += "<div class='frame'>";
+        scoreBoardInnerHTML += "<div class='frame'> Frame - ";
+        scoreBoardInnerHTML += (frame + 1);
         if(this.isStrike(roll)){
           scoreBoardInnerHTML += "<p class='pins'><span class='strike'>X</span><span class='strike'>-</span></p>";
           roll +=1;
@@ -92,6 +113,7 @@ class App extends Component {
           scoreBoardInnerHTML += "<p class='pins'><span class='strike'>"+this.state.rolls[roll]+"</span><span class='strike'>"+this.state.rolls[roll+1]+"</span></p>";
           roll += 2;
         } 
+        scoreBoardInnerHTML += this.state.frameScore[frame];
         scoreBoardInnerHTML += "</div>";
         scoreBoard.innerHTML += scoreBoardInnerHTML;
       }
