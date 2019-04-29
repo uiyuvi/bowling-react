@@ -112,50 +112,91 @@ class App extends Component {
   resetGame() {
     this.setState({ rolls: [] });
   }
-
   render() {
-    let scoreBoard = document.querySelector('.scoreBoard');
     let roll = 0;
-    let scoreBoardInnerHTML;
-    if(this.state.score && scoreBoard != null){
-      scoreBoard.innerHTML = "";
+    let scoreBoardComponent = [],
+        firstRollScore,
+        secondRollScore,
+        thirdRollScore;
+    if(this.state.score){      
       for(let frame = 0; frame < 10; frame++){
-        scoreBoardInnerHTML = "";
-        scoreBoardInnerHTML += "<div class='frame'> Frame - ";
-        scoreBoardInnerHTML += (frame + 1);
         if(frame !== 9){
           if(this.isStrike(roll)){
-            scoreBoardInnerHTML += "<p class='pins'><span class='strike'>X</span><span class='strike'>-</span></p>";
+            firstRollScore='X';
+            secondRollScore='-';
             roll +=1;
-          } else if(this.isSpare(roll)){
-            scoreBoardInnerHTML += "<p class='pins'><span class='spare'>"+this.state.rolls[roll]+"</span><span class='spare'>/</span></p>";
+          } else if(this.isSpare(roll)){            
+            firstRollScore= this.state.rolls[roll];
+            secondRollScore='/';
             roll += 2;
           } else {
-            scoreBoardInnerHTML += "<p class='pins'><span>"+this.state.rolls[roll]+"</span><span>"+this.state.rolls[roll+1]+"</span></p>";
+            firstRollScore= this.state.rolls[roll];
+            secondRollScore=this.state.rolls[roll+1];
             roll += 2;
           }
         } else {
-          scoreBoardInnerHTML += "<p class='pins'><span>"+(this.state.rolls[roll] === 10 ? 'X' : this.state.rolls[roll])+"</span><span>"+((this.state.rolls[roll] + this.state.rolls[roll+1]) === 10 ? '/' : this.state.rolls[roll+1])+"</span>";
-          if(this.state.rolls[roll+2]){
-            scoreBoardInnerHTML += "<span>"+this.state.rolls[roll+2]+"</span>"
-          }
-          scoreBoardInnerHTML +=  "</p>"
+          firstRollScore= (this.state.rolls[roll] === 10 ? 'X' : this.state.rolls[roll]);
+          secondRollScore=((this.state.rolls[roll] + this.state.rolls[roll+1]) === 10 ? '/' : this.state.rolls[roll+1]);
+          thirdRollScore=this.state.rolls[roll+2];          
           roll+=2;
         }
-        scoreBoardInnerHTML += this.state.frameScore[frame];
-        scoreBoardInnerHTML += "</div>";
-        scoreBoard.innerHTML += scoreBoardInnerHTML;
+        scoreBoardComponent.push( <Frame key={frame}
+                                  frameIndex={frame+1}
+                                  firstRollScore={firstRollScore}
+                                  secondRollScore={secondRollScore}
+                                  thirdRollScore={thirdRollScore}
+                                  frameScore={this.state.frameScore[frame]}
+                                  />
+                                );
       }
-    }
+    }  
+
     return (
       <div className="App">
         <input type ="button" onClick={this.startGame} value = "Start game"/>
         <p>Score board:</p>
-        <div className="scoreBoard"></div>
+        <div className="scoreBoard">{scoreBoardComponent}</div>
         <p> Your score is : {this.state.score} </p>
       </div>
     );
   }
 }
 
-export default App;
+
+export default App;  
+
+
+let Pins = ({firstRollScore,secondRollScore,thirdRollScore}) => {
+  let thirdPin;
+  if(thirdRollScore !== undefined){
+    thirdPin = <Pin score = {thirdRollScore}/>;
+  }
+  return (
+    <p className='pins'>
+      <Pin score = {firstRollScore}/>
+      <Pin score = {secondRollScore}/>
+      {thirdPin}
+    </p>
+  )
+}
+
+let Pin = ({score}) => {
+  let pinClass = '';
+  if(score === 'X' || score === '-'){
+    pinClass = 'strike';
+  } else if (score === '/'){
+    pinClass = 'spare';
+  }
+  return <span className={pinClass}>{score}</span>;
+}
+  
+  
+let Frame = ({frameIndex, firstRollScore, secondRollScore, thirdRollScore, frameScore}) => {  
+  return (
+    <div className='frame'> 
+      <span> Frame - {frameIndex} </span>
+      <Pins firstRollScore={firstRollScore} secondRollScore={secondRollScore} thirdRollScore={thirdRollScore}/>
+      {frameScore}  
+    </div>
+  )
+}
