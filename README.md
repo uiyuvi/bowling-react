@@ -50,12 +50,12 @@ Inspired from [Udacity](https://udacity.github.io/git-styleguide/)
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app). You can find more information on how to perform common tasks [here](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md).
 
 ## Publishing this in github pages
-1. Install gh-pages
-npm install gh-pages
-2. Add below scripts in package.json
-"predeploy": "npm run build",
-"deploy": "gh-pages -d build" (build is directory generated as output)
-3. deploy in github pages
+1. Install gh-pages<br>
+npm install gh-pages<br>
+2. Add below scripts in package.json<br>
+"predeploy": "npm run build",<br>
+"deploy": "gh-pages -d build" (build is directory generated as output)<br>
+3. deploy in github pages<br>
 npm run deploy
 
 ## Contributing
